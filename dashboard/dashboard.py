@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Load dataset
-file_url = "https://raw.githubusercontent.com/Aryaagunawan/Proyek-Analisis-Data/master/PRSA_Data_Dingling_20130301-20170228.csv"
-
+file_path = 'dashboard/PRSA_Data_Dingling_20130301-20170228'
+df = pd.read_csv(file_path)
 try:
     df = pd.read_csv(file_url, on_bad_lines='skip')
 except Exception as e:
