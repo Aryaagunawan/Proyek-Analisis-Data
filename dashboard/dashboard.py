@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Load dataset
-file_url = "https://raw.githubusercontent.com/Aryaagunawan/Proyek-Analisis-Data/dashboard/PRSA_Data_Dingling_20130301-20170228.csv"
+file_url = "https://github.com/Aryaagunawan/Proyek-Analisis-Data/blob/master/PRSA_Data_Dingling_20130301-20170228.csv"
 df = pd.read_csv(file_url, on_bad_lines='skip')
 
 # Cek apakah 'date' ada, jika tidak, buat dari 'year', 'month', 'day'
