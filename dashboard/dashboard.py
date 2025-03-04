@@ -8,7 +8,7 @@ st.set_page_config(
     page_title="Dashboard",
     page_icon="📝",
     layout="wide"
-
+)
 # Load dataset
 file_path = "https://raw.githubusercontent.com/Aryaagunawan/Proyek-Analisis-Data/refs/heads/master/dashboard/PRSA_Data_Dingling_20130301-20170228.csv"
 df = pd.read_csv(file_path, on_bad_lines='skip')
