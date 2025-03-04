@@ -63,7 +63,7 @@ st.pyplot(fig)
 
 # Heatmap korelasi jika parameter lingkungan dipilih
 if selected_params:
-    st.subheader("🔥 Heatmap Korelasi")
+    st.subheader("📜 Heatmap Korelasi")
     correlation_matrix = df_filtered[[pollutant] + selected_params].corr()
     fig, ax = plt.subplots(figsize=(8, 6))
     sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt='.2f', ax=ax)
@@ -75,5 +75,5 @@ st.write(df_filtered[[pollutant]].describe())
 
 # Penutup di Sidebar
 st.sidebar.markdown("---")
-st.sidebar.markdown("📌 **By Arya Gunawan**")
+st.sidebar.markdown("👩👨🏼‍🎓 **By Arya Gunawan**")
 st.sidebar.markdown("📅 **Tahun: 2025**")
