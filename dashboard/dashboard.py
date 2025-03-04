@@ -6,7 +6,7 @@ import seaborn as sns
 # Konfigurasi halaman aplikasi Streamlit
 st.set_page_config(
     page_title="Analisis Kualitas Udara",
-    page_icon="🌍",
+    page_icon="📝",
     layout="wide"
 )
 
@@ -72,3 +72,8 @@ if selected_params:
 # Tampilkan ringkasan statistik untuk polutan yang dipilih
 st.write(f"📌 Statistik untuk {pollutant}")
 st.write(df_filtered[[pollutant]].describe())
+
+# Penutup
+st.markdown("---")
+st.markdown("📌 **By Arya Gunawan**")
+st.markdown("📅 **Tahun: 2025**")
