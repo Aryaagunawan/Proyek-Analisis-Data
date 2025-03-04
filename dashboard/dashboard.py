@@ -15,7 +15,7 @@ data_url = "https://raw.githubusercontent.com/Aryaagunawan/Proyek-Analisis-Data/
 df = pd.read_csv(data_url, on_bad_lines='skip')
 
 # Menampilkan sidebar dengan logo dan judul
-st.sidebar.image("https://cdn-icons-png.flaticon.com/128/10424/10424017.png", width=180)
+st.sidebar.image("https://cdn-icons-png.flaticon.com/128/10424/10424017.png", width=150)
 st.sidebar.title("📊 Dashboard Kualitas Udara")
 
 # Validasi kolom tanggal dalam dataset
