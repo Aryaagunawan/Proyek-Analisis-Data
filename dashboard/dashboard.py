@@ -5,7 +5,7 @@ import seaborn as sns
 
 # Konfigurasi halaman aplikasi Streamlit
 st.set_page_config(
-    page_title="Analisis Kualitas Udara",
+    page_title="Air Quality Dataset",
     page_icon="📝",
     layout="wide"
 )
@@ -16,7 +16,7 @@ df = pd.read_csv(data_url, on_bad_lines='skip')
 
 # Menampilkan sidebar dengan logo dan judul
 st.sidebar.image("https://cdn-icons-png.flaticon.com/128/10424/10424017.png", width=150)
-st.sidebar.title("📊 Dashboard Kualitas Udara")
+st.sidebar.title("📊 Dashboard Air Quality Dataset")
 
 # Validasi kolom tanggal dalam dataset
 if 'date' not in df.columns:
