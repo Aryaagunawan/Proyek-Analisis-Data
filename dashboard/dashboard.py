@@ -13,7 +13,7 @@ st.set_page_config(
 file_path = "https://raw.githubusercontent.com/Aryaagunawan/Proyek-Analisis-Data/refs/heads/master/dashboard/PRSA_Data_Dingling_20130301-20170228.csv"
 df = pd.read_csv(file_path, on_bad_lines='skip')
 
-st.sidebar.image("https://cdn-icons-png.flaticon.com/128/10424/10424017.png", width=100)
+st.sidebar.image("https://cdn-icons-png.flaticon.com/128/10424/10424017.png", width=300)
 st.sidebar.title("Air Quality Dataset")
 
 # Cek apakah 'date' ada, jika tidak, buat dari 'year', 'month', 'day'
