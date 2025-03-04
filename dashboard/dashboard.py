@@ -3,66 +3,72 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# **Konfigurasi Dashboard**
-st.set_page_config(page_title="Analisis Kualitas Udara", page_icon="🌍", layout="wide")
+# Konfigurasi halaman aplikasi Streamlit
+st.set_page_config(
+    page_title="Analisis Kualitas Udara",
+    page_icon="🌍",
+    layout="wide"
+)
 
-# **Memuat dataset**
-dataset_url = "https://raw.githubusercontent.com/Aryaagunawan/Proyek-Analisis-Data/master/PRSA_Data_Dingling_20130301-20170228.csv"
-try:
-    df = pd.read_csv(dataset_url, on_bad_lines='skip')
-except Exception as e:
-    st.error(f"Gagal memuat dataset: {e}")
-    st.stop()
+# Memuat dataset dari sumber eksternal
+data_url = "https://raw.githubusercontent.com/Aryaagunawan/Proyek-Analisis-Data/refs/heads/master/dashboard/PRSA_Data_Dingling_20130301-20170228.csv"
+df = pd.read_csv(data_url, on_bad_lines='skip')
 
-# **Sidebar - Navigasi dan Filter**
-st.sidebar.image("https://cdn-icons-png.flaticon.com/128/10424/10424017.png", width=150)
-st.sidebar.title("🌍 Analisis Kualitas Udara")
+# Menampilkan sidebar dengan logo dan judul
+st.sidebar.image("https://cdn-icons-png.flaticon.com/128/10424/10424017.png", width=180)
+st.sidebar.title("📊 Dashboard Kualitas Udara")
 
-# **Proses Data**
-if 'date' not in df.columns and {'year', 'month', 'day'}.issubset(df.columns):
-    df['date'] = pd.to_datetime(df[['year', 'month', 'day']])
-elif 'date' not in df.columns:
-    st.error("Kolom 'date' tidak ditemukan dan tidak dapat dibuat.")
-    st.stop()
+# Validasi kolom tanggal dalam dataset
+if 'date' not in df.columns:
+    if {'year', 'month', 'day'}.issubset(df.columns):
+        df['date'] = pd.to_datetime(df[['year', 'month', 'day']])
+    else:
+        st.error("Data tidak memiliki kolom tanggal yang valid.")
+        st.stop()
 
+# Menetapkan kolom 'date' sebagai indeks
 df.set_index('date', inplace=True)
 
-# **Filter Data Berdasarkan Rentang Waktu**
-st.sidebar.header("Filter Data")
+# Sidebar: Filter data berdasarkan tanggal dan tahun
+st.sidebar.header("🔎 Filter Data")
 start_date = st.sidebar.date_input("Tanggal Awal", df.index.min().date())
 end_date = st.sidebar.date_input("Tanggal Akhir", df.index.max().date())
+year_range = st.sidebar.slider("Rentang Tahun", int(df.index.year.min()), int(df.index.year.max()), 
+                               (int(df.index.year.min()), int(df.index.year.max())))
 
-# **Pilihan Polutan dengan Checkbox**
-st.sidebar.subheader("Pilih Polutan")
-pollutants = ['PM2.5', 'PM10', 'SO2', 'NO2', 'CO', 'O3']
-selected_pollutants = [p for p in pollutants if st.sidebar.checkbox(p, value=True)]
+# Sidebar: Pilih polutan dan parameter lingkungan
+pollutant = st.sidebar.selectbox("Pilih Polutan", ['PM2.5', 'PM10', 'SO2', 'NO2', 'CO', 'O3'])
+selected_params = st.sidebar.multiselect("Pilih Parameter", ['TEMP', 'DEWP', 'PRES', 'RAIN'])
 
-if not selected_pollutants:
-    st.error("Pilih setidaknya satu polutan untuk dianalisis.")
-    st.stop()
-
-# **Filter dataset berdasarkan tanggal**
+# Filter data berdasarkan input pengguna
 df_filtered = df[(df.index >= pd.Timestamp(start_date)) & (df.index <= pd.Timestamp(end_date))]
+df_filtered = df_filtered[(df_filtered.index.year >= year_range[0]) & (df_filtered.index.year <= year_range[1])]
 
-# **Tampilkan Statistik Rata-rata**
-st.header("📊 Statistik Polutan")
-st.dataframe(df_filtered[selected_pollutants].describe())
+# Menampilkan grafik tren polutan utama
+st.header("📈 Tren PM2.5 dan PM10")
+avg_pm_trend = df_filtered.groupby(df_filtered.index.year)[['PM2.5', 'PM10']].mean()
+st.line_chart(avg_pm_trend)
 
-# **Visualisasi Tren Polutan**
-st.subheader("📈 Tren Polutan dari Tahun ke Tahun")
-avg_trend = df_filtered[selected_pollutants].resample('M').mean()
-st.line_chart(avg_trend)
+# Korelasi antara PM2.5 dan PM10
+st.write(f"🔗 Korelasi antara PM2.5 dan PM10: {df_filtered['PM2.5'].corr(df_filtered['PM10']):.2f}")
 
-# **Visualisasi Distribusi Data dengan Boxplot**
-st.subheader("📊 Distribusi Polutan")
-fig, ax = plt.subplots(figsize=(10, 6))
-sns.boxplot(data=df_filtered[selected_pollutants], ax=ax)
-ax.set_title("Boxplot Distribusi Polutan")
+# Histogram distribusi polutan
+st.subheader("📊 Distribusi PM2.5 dan PM10")
+fig, ax = plt.subplots(1, 2, figsize=(12, 6))
+sns.histplot(df_filtered['PM2.5'].dropna(), bins=50, kde=True, color='blue', ax=ax[0])
+ax[0].set_title("Distribusi PM2.5")
+sns.histplot(df_filtered['PM10'].dropna(), bins=50, kde=True, color='orange', ax=ax[1])
+ax[1].set_title("Distribusi PM10")
 st.pyplot(fig)
 
-# **Menampilkan Korelasi dalam Bentuk Heatmap**
-st.subheader("🔥 Korelasi Antar Polutan")
-corr_matrix = df_filtered[selected_pollutants].corr()
-fig, ax = plt.subplots(figsize=(8, 6))
-sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', fmt='.2f', ax=ax)
-st.pyplot(fig)
+# Heatmap korelasi jika parameter lingkungan dipilih
+if selected_params:
+    st.subheader("🔥 Heatmap Korelasi")
+    correlation_matrix = df_filtered[[pollutant] + selected_params].corr()
+    fig, ax = plt.subplots(figsize=(8, 6))
+    sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt='.2f', ax=ax)
+    st.pyplot(fig)
+
+# Tampilkan ringkasan statistik untuk polutan yang dipilih
+st.write(f"📌 Statistik untuk {pollutant}")
+st.write(df_filtered[[pollutant]].describe())
