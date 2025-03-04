@@ -73,7 +73,7 @@ if selected_params:
 st.write(f"📌 Statistik untuk {pollutant}")
 st.write(df_filtered[[pollutant]].describe())
 
-# Penutup
-st.markdown("---")
-st.markdown("📌 **By Arya Gunawan**")
-st.markdown("📅 **Tahun: 2025**")
+# Penutup di Sidebar
+st.sidebar.markdown("---")
+st.sidebar.markdown("📌 **By Arya Gunawan**")
+st.sidebar.markdown("📅 **Tahun: 2025**")
