@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Load dataset
-file_path = 'dashboard/PRSA_Data_Dingling_20130301-20170228'
+file_path = 'https://raw.githubusercontent.com/Aryaagunawan/Proyek-Analisis-Data/refs/heads/master/dashboard/PRSA_Data_Dingling_20130301-20170228.csv'
 df = pd.read_csv(file_path)
 try:
     df = pd.read_csv(file_url, on_bad_lines='skip')
