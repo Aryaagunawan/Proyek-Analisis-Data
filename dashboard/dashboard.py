@@ -75,5 +75,5 @@ st.write(df_filtered[[pollutant]].describe())
 
 # Penutup di Sidebar
 st.sidebar.markdown("---")
-st.sidebar.markdown("👩👨🏼‍🎓 **By Arya Gunawan**")
+st.sidebar.markdown("👨🏼‍🎓 **By Arya Gunawan**")
 st.sidebar.markdown("📅 **Tahun: 2025**")
